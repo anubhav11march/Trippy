@@ -11,74 +11,64 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="250dp"
-        android:layout_height="150dp"
+        android:layout_width="127dp"
+        android:layout_height="69dp"
+
+        android:layout_marginBottom="88dp"
         android:layout_marginEnd="45dp"
         android:layout_marginStart="45dp"
-        android:layout_marginTop="60dp"
         android:background="@drawable/logo1"
+        app:layout_constraintBottom_toTopOf="@+id/google"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/logo"
+        android:id="@+id/fb"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:layout_marginTop="388dp"
+        android:layout_marginBottom="39dp"
+        android:layout_marginTop="104dp"
         android:background="@drawable/fb"
+        android:onClick="FbLogIn"
+        app:layout_constraintBottom_toTopOf="@+id/phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/google" />
 
     <Button
+        android:id="@+id/phone"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_marginBottom="150dp"
+        android:layout_marginTop="39dp"
         android:background="@color/colorPrimary"
         android:text="Login with Phone"
         android:textAllCaps="false"
+        android:onClick="PhoneLogIn"
         android:textSize="40dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="511dp" />
-
-    <TextView
-        android:layout_width=""
-        android:text="Already have an account"
-        android:layout_height=""/>
-    <TextView
-        android:layout_width=""
-        android:text="Sign in"
-        android:layout_height=""/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fb" />
 
 
     <ImageView
+        android:id="@+id/google"
         android:layout_width="0dp"
         android:layout_height="70dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="92dp"
         android:layout_weight="1"
         android:background="@drawable/google"
         android:onClick="googleLogIn"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="278dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="check"
-        android:onClick="checkCurrentUser"/>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="logout"
-        android:text="Logout" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:text="Phone"
-        android:onClick="phoneSignIn"
-        android:layout_height="wrap_content" />
-
+        app:layout_constraintBottom_toTopOf="@+id/fb"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
