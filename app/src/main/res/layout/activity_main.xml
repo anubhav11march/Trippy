@@ -41,14 +41,14 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="511dp" />
 
-    <TextView
-        android:layout_width=""
-        android:text="Already have an account"
-        android:layout_height=""/>
-    <TextView
-        android:layout_width=""
-        android:text="Sign in"
-        android:layout_height=""/>
+    <!--<TextView-->
+        <!--android:layout_width=""-->
+        <!--android:text="Already have an account"-->
+        <!--android:layout_height=""/>-->
+    <!--<TextView-->
+        <!--android:layout_width=""-->
+        <!--android:text="Sign in"-->
+        <!--android:layout_height=""/>-->
 
 
     <ImageView
