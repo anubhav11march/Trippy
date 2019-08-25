@@ -17,20 +17,26 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
     private GoogleSignInClient googleSignInClient;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    private boolean inProgress = false;
     private int RC_SIGNIN = 9001;
     private PhoneAuthProvider .OnVerificationStateChangedCallbacks mCallbacks;
+    private String verificationId;
 //    private CallbackManager mCallbakckManagaer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +55,17 @@ public class MainActivity extends AppCompatActivity {
         if(currentUser != null)
             Toast.makeText(this, "Signed in as: " + currentUser.getEmail(), Toast.LENGTH_LONG).show();
 
-        //phone
+        currentUser = mAuth.getCurrentUser();
     }
 
     public void googleLogIn(View view){
         Intent signIn = googleSignInClient.getSignInIntent();
         startActivityForResult(signIn, RC_SIGNIN);
+    }
+
+    public void phoneSignIn(View view){
+        Intent intent = new Intent(MainActivity.this, PhoneLogin.class);
+        startActivity(intent);
     }
 
     @Override
@@ -91,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 
     public void checkCurrentUser(View view){
         if(mAuth.getCurrentUser()!=null)
