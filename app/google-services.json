@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "787859201122",
+    "firebase_url": "https://trippy-5f3b2.firebaseio.com",
+    "project_id": "trippy-5f3b2",
+    "storage_bucket": "trippy-5f3b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787859201122:android:9cdd039d676813c6",
+        "android_client_info": {
+          "package_name": "com.example.trippy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787859201122-7isruqbnmvhb0daf3tb0eome4i5bjpob.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trippy",
+            "certificate_hash": "0447bc7a975bdf9937d9f15a20f4f66e1e8f2094"
+          }
+        },
+        {
+          "client_id": "787859201122-8vc8alcb24irb9u502jrmd5dgjgbpjcc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCe7BXvpR-g0X5CLeKUP5zZd4EiacK3-sY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787859201122-8vc8alcb24irb9u502jrmd5dgjgbpjcc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
