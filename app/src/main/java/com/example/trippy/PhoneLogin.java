@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -87,6 +88,7 @@ public class PhoneLogin extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Log.v("AAA", "Sign in Successful");
+                            Toast.makeText(PhoneLogin.this, "Signed in", Toast.LENGTH_SHORT).show();
                         }
                         else
                             Log.v("AAA", "Sign in Failed");
