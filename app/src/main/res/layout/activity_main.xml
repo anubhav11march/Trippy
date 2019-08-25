@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+
+    android:background="@drawable/bg"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
@@ -24,8 +25,7 @@
         android:id="@+id/logo"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="368dp"
+        android:layout_marginTop="388dp"
         android:background="@drawable/fb"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,12 +34,12 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:text="Login with Phone"
         android:background="@color/colorPrimary"
+        android:text="Login with Phone"
         android:textAllCaps="false"
         android:textSize="40dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="461dp" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="511dp" />
 
     <TextView
         android:layout_width=""
