@@ -7,8 +7,15 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="80dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="30dp"
+        android:onClick="googleLogIn"
+        android:layout_marginRight="30dp"
         android:background="@drawable/google"/>
+
+
 
 </LinearLayout>
