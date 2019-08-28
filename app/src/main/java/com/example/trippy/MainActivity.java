@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -26,24 +28,29 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import java.net.CookieManager;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
     private GoogleSignInClient googleSignInClient;
+
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private boolean inProgress = false;
     private int RC_SIGNIN = 9001;
+    private Button glog, fblog, pholog;
     private PhoneAuthProvider .OnVerificationStateChangedCallbacks mCallbacks;
     private String verificationId;
-//    private CallbackManager mCallbakckManagaer;
+//    private CallbackManager mCallbackManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-
+        glog = (Button) findViewById(R.id.google);
+        fblog = (Button) findViewById(R.id.fb);
+        pholog = (Button) findViewById(R.id.phone);
         //google log in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("787859201122-8vc8alcb24irb9u502jrmd5dgjgbpjcc.apps.googleusercontent.com")
@@ -59,11 +66,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void googleLogIn(View view){
+        glog.setBackgroundDrawable(getResources().getDrawable(R.drawable.onclickbutton));
         Intent signIn = googleSignInClient.getSignInIntent();
         startActivityForResult(signIn, RC_SIGNIN);
     }
 
     public void phoneSignIn(View view){
+        pholog.setBackgroundDrawable(getResources().getDrawable(R.drawable.onclickbutton));
         Intent intent = new Intent(MainActivity.this, PhoneLogin.class);
         startActivity(intent);
     }
@@ -113,7 +122,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logout(View view){
+
         mAuth.signOut();
+        googleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(MainActivity.this, "Successfully Logged Out", Toast.LENGTH_SHORT).show();
+            }
+        });
+//        try {
+//            // clearing app data
+//            String packageName = getApplicationContext().getPackageName();
+//            Runtime runtime = Runtime.getRuntime();
+//            runtime.exec("pm clear "+packageName);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 }
