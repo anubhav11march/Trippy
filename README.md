@@ -1,2 +1,2 @@
 # Trippy
-A Trip journal app.
+A journal app.
