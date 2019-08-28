@@ -103,5 +103,23 @@
         android:onClick="checkCurrentUser"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="82dp"
+        android:layout_marginEnd="176dp"
+        android:layout_marginBottom="51dp"
+        android:text="Continue with..."
+        android:textColor="#FFFFFF"
+        android:textSize="25dp"
+        android:textStyle="italic"
+        android:fontFamily="@font/comicsansms"
+        app:layout_constraintBottom_toTopOf="@+id/google"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
