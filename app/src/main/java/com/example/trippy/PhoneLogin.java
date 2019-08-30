@@ -3,9 +3,12 @@ package com.example.trippy;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,9 +25,10 @@ import java.util.concurrent.TimeUnit;
 
 public class PhoneLogin extends AppCompatActivity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
-    private String verificationId;
+    private String verificationId, number;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    private Button button;
     private boolean inProgress = false;
     private EditText phoneNumber, OTPCode;
     @Override
@@ -32,6 +36,7 @@ public class PhoneLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_login);
         mAuth = FirebaseAuth.getInstance();
+        button = (Button) findViewById(R.id.buttonSignin);
         phoneNumber = (EditText) findViewById(R.id.pnumber);
         phoneNumber.setText("+91");
         OTPCode = (EditText) findViewById(R.id.otp);
@@ -40,10 +45,12 @@ public class PhoneLogin extends AppCompatActivity {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
                 inProgress = false;
+                Log.v("AAA", "Verification Complete");
             }
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
+                Log.v("AAA", "Verification Failed" + e.toString());
                 inProgress = false;
             }
 
@@ -72,8 +79,12 @@ public class PhoneLogin extends AppCompatActivity {
 
     public void buttonRequestOtp(View view){
         Log.v("AAA", "requestOtp");
-        String number = phoneNumber.getText().toString();
-        verifyNumber(number);
+        number = phoneNumber.getText().toString().trim();
+        if(!TextUtils.isEmpty(number) && number.length() ==13){
+            verifyNumber(number);
+        }
+        else
+            Toast.makeText(getApplicationContext(), "Invalid number", Toast.LENGTH_SHORT).show();
     }
 
     public void verifyNumberWithCode(String otp, String verificationId){
@@ -81,23 +92,31 @@ public class PhoneLogin extends AppCompatActivity {
         signInWithNumber(credential);
     }
 
-    public void signInWithNumber(PhoneAuthCredential  credential){
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Log.v("AAA", "Sign in Successful");
-                            Toast.makeText(PhoneLogin.this, "Signed in", Toast.LENGTH_SHORT).show();
+    public void signInWithNumber(final PhoneAuthCredential  credential){
+//        String phoneNumber =
+//        if(!TextUtils)
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                Log.v("AAA", "Sign in Successful");
+                                Toast.makeText(getApplicationContext(), number + " Signed in", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(PhoneLogin.this, NameActivity.class);
+                                intent.putExtra("phoneNumber", number);
+                                startActivity(intent);
+                            }
+                            else {
+                                Log.v("AAA", "Sign in Failed");
+                                Toast.makeText(getApplicationContext(), "Couldn't sign in, Please check number and otp", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else
-                            Log.v("AAA", "Sign in Failed");
-                    }
-                });
+                    });
     }
 
     public void phoneSignIn(View view){
         Log.v("AAA", "Sign in Clicked");
+        button.setClickable(false);
         verifyNumberWithCode(OTPCode.getText().toString(), verificationId);
     }
 }

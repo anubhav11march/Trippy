@@ -5,29 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".PhoneLogin">
+    tools:context=".NameActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="35dp"
+        android:text="Hi User!"
+        android:id="@+id/user"
+        android:textStyle="bold"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You are one step away from starting journal-ising"
+        android:textSize="15dp"
+        android:layout_margin="20dp"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/pnumber"/>
-
+        android:hint="Enter your name"
+        android:id="@+id/name"
+        />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Request OTP"
-        android:onClick="buttonRequestOtp"/>
+        android:text="GEt STARTED"
+        android:onClick="finni"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/otp"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="LOGIN"
-        android:id="@+id/buttonSignin"
-        android:onClick="phoneSignIn"/>
+
 
 </LinearLayout>
