@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,15 +28,26 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+
 import com.facebook.FacebookSdk;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 
 import java.net.CookieManager;
 import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    private GoogleSignInClient googleSignInClient;
 
+
+    private CallbackManager mCallbackManager;
+    private GoogleSignInClient googleSignInClient;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private boolean inProgress = false;
@@ -49,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
         glog = (Button) findViewById(R.id.google);
         fblog = (Button) findViewById(R.id.fb);
         pholog = (Button) findViewById(R.id.phone);
@@ -63,6 +78,39 @@ public class MainActivity extends AppCompatActivity {
         if(currentUser != null)
             Toast.makeText(this, "Signed in as: " + currentUser.getEmail(), Toast.LENGTH_LONG).show();
 
+        //fb login
+        mCallbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(
+                mCallbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Log.v("AAA", "FB Logged in " + loginResult);
+                        handleFacebookAccessToken(loginResult.getAccessToken());
+                    }
+                    @Override
+                    public void onCancel() {
+                        Log.v("AAA", "Sign in cancelled FB");
+                    }
+
+
+
+                    @Override
+
+                    public void onError(FacebookException error) {
+
+                        Log.v("AAA","FB Login Error");
+
+                    }
+
+                }
+
+        );
+
+
+
+
+
         currentUser = mAuth.getCurrentUser();
     }
 
@@ -76,6 +124,14 @@ public class MainActivity extends AppCompatActivity {
         pholog.setBackgroundDrawable(getResources().getDrawable(R.drawable.onclickbutton));
         Intent intent = new Intent(MainActivity.this, PhoneLogin.class);
         startActivity(intent);
+    }
+
+
+    public void fblogin(View v) {
+        LoginManager.getInstance().logInWithReadPermissions(
+                this,
+                Arrays.asList("email", "public_profile")
+        );
     }
 
     @Override
@@ -96,6 +152,27 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void handleFacebookAccessToken(AccessToken token){
+        Log.v("AAA", "FB Access Token");
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Log.v("AAA", "Log in Success through FB");
+                        }
+                        else {
+                            Log.v("AAA", "Log in through FB failed");
+                        }
+                    }
+                });
+    }
+
+
+
+
 
     public void firebaseAuthWithGoogle(GoogleSignInAccount account){
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);

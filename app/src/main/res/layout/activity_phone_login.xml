@@ -36,7 +36,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LOGINpull
+        android:text="LOGIN"
         android:layout_marginLeft="150dp"
         android:onClick="phoneSignIn"/>
 
