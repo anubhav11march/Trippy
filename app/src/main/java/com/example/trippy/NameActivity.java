@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class NameActivity extends AppCompatActivity {
     private String number;
@@ -51,7 +52,7 @@ public class NameActivity extends AppCompatActivity {
         String userName = name.getText().toString().trim();
         if(!TextUtils.isEmpty(userName)){
 //            String id = mRef.push().getKey();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy, hh:mm:ss a");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy, hh:mm:ss a", Locale.getDefault());
             String timestamp = sdf.format(new Date());
             mRef.child(firebaseUser.getUid()).child("Name").setValue(userName);
             mRef.child(firebaseUser.getUid()).child("Number or Email").setValue(number);

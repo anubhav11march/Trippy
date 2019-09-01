@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +29,7 @@ public class PhoneLogin extends AppCompatActivity {
     private String verificationId, number;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private Button button;
+    private Button button, requestOtpButton, resendOtp;
     private boolean inProgress = false;
     private EditText phoneNumber, OTPCode;
     @Override
@@ -37,6 +38,8 @@ public class PhoneLogin extends AppCompatActivity {
         setContentView(R.layout.activity_phone_login);
         mAuth = FirebaseAuth.getInstance();
         button = (Button) findViewById(R.id.buttonSignin);
+        requestOtpButton = (Button) findViewById(R.id.otpbutton);
+        resendOtp = (Button) findViewById(R.id.resendOtp);
         phoneNumber = (EditText) findViewById(R.id.pnumber);
         phoneNumber.setText("+91");
         OTPCode = (EditText) findViewById(R.id.otp);
@@ -64,6 +67,8 @@ public class PhoneLogin extends AppCompatActivity {
 
         currentUser = mAuth.getCurrentUser();
 
+
+
     }
     public void verifyNumber(String phoneNumber){
         Log.v("AAA", "Phone Verification");
@@ -83,8 +88,36 @@ public class PhoneLogin extends AppCompatActivity {
         if(!TextUtils.isEmpty(number) && number.length() ==13){
             verifyNumber(number);
         }
-        else
+        else {
             Toast.makeText(getApplicationContext(), "Invalid number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        requestOtpButton.setVisibility(View.INVISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                resendOtp.setVisibility(View.VISIBLE);
+            }
+        }, 15000);
+    }
+
+    public void buttonResendOtp(View view){
+        Log.v("AAA", "resendOtp");
+        number = phoneNumber.getText().toString().trim();
+        if(!TextUtils.isEmpty(number) && number.length() ==13){
+            verifyNumber(number);
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Invalid number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        resendOtp.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                resendOtp.setVisibility(View.VISIBLE);
+            }
+        }, 15000);
     }
 
     public void verifyNumberWithCode(String otp, String verificationId){
