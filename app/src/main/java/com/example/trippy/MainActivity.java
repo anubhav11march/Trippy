@@ -6,7 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +42,9 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
 import java.net.CookieManager;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import android.content.pm.Signature;
 import java.util.concurrent.TimeUnit;
 import java.util.Arrays;
 
@@ -87,10 +93,12 @@ public class MainActivity extends AppCompatActivity {
                     public void onSuccess(LoginResult loginResult) {
                         Log.v("AAA", "FB Logged in " + loginResult);
                         handleFacebookAccessToken(loginResult.getAccessToken());
+                        Toast.makeText(getApplicationContext(), "Logged in as :", Toast.LENGTH_SHORT).show();
                     }
                     @Override
                     public void onCancel() {
                         Log.v("AAA", "Sign in cancelled FB");
+                        Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_LONG).show();
                     }
 
 
@@ -98,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
 
                     public void onError(FacebookException error) {
-
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
                         Log.v("AAA","FB Login Error");
 
                     }
@@ -109,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+        hashKey();
 
         currentUser = mAuth.getCurrentUser();
     }
@@ -139,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         if(mAuth.getCurrentUser() != null)
             return;
         super.onActivityResult(requestCode, resultCode, data);
-
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RC_SIGNIN){
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try{
@@ -197,6 +205,27 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Signed in as: " + mAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(this, "No user signed in", Toast.LENGTH_SHORT).show();
+    }
+
+        public void hashKey(){
+        PackageInfo info;
+        try {
+            info = getPackageManager().getPackageInfo("com.example.trippy", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md;
+                md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String something = new String(Base64.encode(md.digest(), 0));
+                //String something = new String(Base64.encodeBytes(md.digest()));
+                Log.v("AAAhash key", something);
+            }
+        } catch (PackageManager.NameNotFoundException e1) {
+            Log.e("name not found", e1.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("no such an algorithm", e.toString());
+        } catch (Exception e) {
+            Log.e("exception", e.toString());
+        }
     }
 
     public void logout(View view){

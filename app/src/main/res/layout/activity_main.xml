@@ -35,7 +35,7 @@
         android:text="Facebook"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
-        android:onClick="FbLogIn"
+        android:onClick="fblogin"
         android:textSize="30dp"
         app:layout_constraintBottom_toTopOf="@+id/phone"
         app:layout_constraintEnd_toEndOf="parent"
