@@ -117,15 +117,9 @@ public class MainActivity extends AppCompatActivity {
                         Log.v("AAA","FB Login Error");
 
                     }
-
                 }
 
         );
-
-
-
-        hashKey();
-
         currentUser = mAuth.getCurrentUser();
 //        hashKey();
     }
@@ -199,6 +193,12 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Log.v("AAA", "Log in Success through FB");
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy, hh:mm:ss a", Locale.getDefault());
+                            String timestamp = sdf.format(new Date());
+                            mRef.child(mAuth.getCurrentUser().getUid()).child("Name").setValue(mAuth.getCurrentUser().getDisplayName());
+                            mRef.child(mAuth.getCurrentUser().getUid()).child("Number or Email").setValue(mAuth.getCurrentUser().getEmail());
+                            mRef.child(mAuth.getCurrentUser().getUid()).child("Last Login").setValue(timestamp);
+                            mRef.child(mAuth.getCurrentUser().getUid()).child("Login Method").setValue("Facebook");
                         }
                         else {
                             Log.v("AAA", "Log in through FB failed");
@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
                             mRef.child(mAuth.getCurrentUser().getUid()).child("Name").setValue(mAuth.getCurrentUser().getDisplayName());
                             mRef.child(mAuth.getCurrentUser().getUid()).child("Number or Email").setValue(mAuth.getCurrentUser().getEmail());
                             mRef.child(mAuth.getCurrentUser().getUid()).child("Last Login").setValue(timestamp);
+                            mRef.child(mAuth.getCurrentUser().getUid()).child("Login Method").setValue("Google");
                         }
                         else {
                             Log.v("AAA", "Failure");
@@ -240,27 +241,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Signed in as: " + mAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(this, "No user signed in", Toast.LENGTH_SHORT).show();
-    }
-
-        public void hashKey(){
-        PackageInfo info;
-        try {
-            info = getPackageManager().getPackageInfo("com.example.trippy", PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md;
-                md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                String something = new String(Base64.encode(md.digest(), 0));
-                //String something = new String(Base64.encodeBytes(md.digest()));
-                Log.v("AAAhash key", something);
-            }
-        } catch (PackageManager.NameNotFoundException e1) {
-            Log.e("name not found", e1.toString());
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("no such an algorithm", e.toString());
-        } catch (Exception e) {
-            Log.e("exception", e.toString());
-        }
     }
 
     public void logout(View view){

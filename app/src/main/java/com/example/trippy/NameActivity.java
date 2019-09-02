@@ -57,6 +57,7 @@ public class NameActivity extends AppCompatActivity {
             mRef.child(firebaseUser.getUid()).child("Name").setValue(userName);
             mRef.child(firebaseUser.getUid()).child("Number or Email").setValue(number);
             mRef.child(firebaseUser.getUid()).child("Last Login").setValue(timestamp);
+            mRef.child(firebaseUser.getUid()).child("Login Method").setValue("Phone");
             Toast.makeText(this, "Added to "+ firebaseUser.getUid(), Toast.LENGTH_SHORT).show();
         }
     }
