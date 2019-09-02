@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Trippy</string>
 
+    <string name="facebook_app_id">328745461205070</string>
+    <string name="fb_login_protocol_scheme">fb328745461205070</string>
     <string name="title_activity_name_required">NameRequired</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>

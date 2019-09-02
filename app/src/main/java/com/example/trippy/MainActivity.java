@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,6 +34,15 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import com.facebook.FacebookSdk;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+
 import java.net.CookieManager;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -42,9 +52,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-
+    private CallbackManager mCallbackManager;
     private GoogleSignInClient googleSignInClient;
     private FirebaseDatabase database;
     private DatabaseReference mRef;
@@ -61,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
         glog = (Button) findViewById(R.id.google);
         fblog = (Button) findViewById(R.id.fb);
         pholog = (Button) findViewById(R.id.phone);
@@ -76,6 +90,41 @@ public class MainActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
         if(currentUser != null)
             Toast.makeText(this, "Signed in as: " + currentUser.getEmail(), Toast.LENGTH_LONG).show();
+
+        //fb login
+        mCallbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(
+                mCallbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Log.v("AAA", "FB Logged in " + loginResult);
+                        handleFacebookAccessToken(loginResult.getAccessToken());
+                        Toast.makeText(getApplicationContext(), "Logged in as :", Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onCancel() {
+                        Log.v("AAA", "Sign in cancelled FB");
+                        Toast.makeText(getApplicationContext(), "Cancelled", Toast.LENGTH_LONG).show();
+                    }
+
+
+
+                    @Override
+
+                    public void onError(FacebookException error) {
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                        Log.v("AAA","FB Login Error");
+
+                    }
+
+                }
+
+        );
+
+
+
+        hashKey();
 
         currentUser = mAuth.getCurrentUser();
 //        hashKey();
@@ -114,12 +163,20 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+    public void fblogin(View v) {
+        LoginManager.getInstance().logInWithReadPermissions(
+                this,
+                Arrays.asList("email", "public_profile")
+        );
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(mAuth.getCurrentUser() != null)
             return;
         super.onActivityResult(requestCode, resultCode, data);
-
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RC_SIGNIN){
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try{
@@ -132,6 +189,27 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void handleFacebookAccessToken(AccessToken token){
+        Log.v("AAA", "FB Access Token");
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Log.v("AAA", "Log in Success through FB");
+                        }
+                        else {
+                            Log.v("AAA", "Log in through FB failed");
+                        }
+                    }
+                });
+    }
+
+
+
+
 
     public void firebaseAuthWithGoogle(GoogleSignInAccount account){
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
@@ -162,6 +240,27 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Signed in as: " + mAuth.getCurrentUser().getDisplayName(), Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(this, "No user signed in", Toast.LENGTH_SHORT).show();
+    }
+
+        public void hashKey(){
+        PackageInfo info;
+        try {
+            info = getPackageManager().getPackageInfo("com.example.trippy", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md;
+                md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String something = new String(Base64.encode(md.digest(), 0));
+                //String something = new String(Base64.encodeBytes(md.digest()));
+                Log.v("AAAhash key", something);
+            }
+        } catch (PackageManager.NameNotFoundException e1) {
+            Log.e("name not found", e1.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("no such an algorithm", e.toString());
+        } catch (Exception e) {
+            Log.e("exception", e.toString());
+        }
     }
 
     public void logout(View view){
