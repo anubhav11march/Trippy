@@ -31,6 +31,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import com.facebook.FacebookSdk;
 import com.facebook.AccessToken;
@@ -45,15 +47,18 @@ import java.net.CookieManager;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import android.content.pm.Signature;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-
-
-
     private CallbackManager mCallbackManager;
     private GoogleSignInClient googleSignInClient;
+    private FirebaseDatabase database;
+    private DatabaseReference mRef;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private boolean inProgress = false;
@@ -73,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
         glog = (Button) findViewById(R.id.google);
         fblog = (Button) findViewById(R.id.fb);
         pholog = (Button) findViewById(R.id.phone);
+        database = FirebaseDatabase.getInstance();
+        mRef = database.getReference().child("Users");
         //google log in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("787859201122-8vc8alcb24irb9u502jrmd5dgjgbpjcc.apps.googleusercontent.com")
@@ -120,7 +127,29 @@ public class MainActivity extends AppCompatActivity {
         hashKey();
 
         currentUser = mAuth.getCurrentUser();
+//        hashKey();
     }
+
+//    public void hashKey(){
+//        PackageInfo info;
+//        try {
+//            info = getPackageManager().getPackageInfo("com.example.trippy", PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md;
+//                md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                String something = new String(Base64.encode(md.digest(), 0));
+//                //String something = new String(Base64.encodeBytes(md.digest()));
+//                Log.v("AAAhash key", something);
+//            }
+//        } catch (PackageManager.NameNotFoundException e1) {
+//            Log.e("name not found", e1.toString());
+//        } catch (NoSuchAlgorithmException e) {
+//            Log.e("no such an algorithm", e.toString());
+//        } catch (Exception e) {
+//            Log.e("exception", e.toString());
+//        }
+//    }
 
     public void googleLogIn(View view){
         glog.setBackgroundDrawable(getResources().getDrawable(R.drawable.onclickbutton));
@@ -188,8 +217,14 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful())
+                        if(task.isSuccessful()) {
                             Log.v("AAA", "Success");
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy, hh:mm:ss a", Locale.getDefault());
+                            String timestamp = sdf.format(new Date());
+                            mRef.child(mAuth.getCurrentUser().getUid()).child("Name").setValue(mAuth.getCurrentUser().getDisplayName());
+                            mRef.child(mAuth.getCurrentUser().getUid()).child("Number or Email").setValue(mAuth.getCurrentUser().getEmail());
+                            mRef.child(mAuth.getCurrentUser().getUid()).child("Last Login").setValue(timestamp);
+                        }
                         else {
                             Log.v("AAA", "Failure");
                             Toast.makeText(MainActivity.this, "Sign In Failed", Toast.LENGTH_LONG).show();
