@@ -199,6 +199,8 @@ public class MainActivity extends AppCompatActivity {
                             mRef.child(mAuth.getCurrentUser().getUid()).child("Number or Email").setValue(mAuth.getCurrentUser().getEmail());
                             mRef.child(mAuth.getCurrentUser().getUid()).child("Last Login").setValue(timestamp);
                             mRef.child(mAuth.getCurrentUser().getUid()).child("Login Method").setValue("Facebook");
+                            startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                            finish();
                         }
                         else {
                             Log.v("AAA", "Log in through FB failed");
@@ -225,6 +227,8 @@ public class MainActivity extends AppCompatActivity {
                             mRef.child(mAuth.getCurrentUser().getUid()).child("Number or Email").setValue(mAuth.getCurrentUser().getEmail());
                             mRef.child(mAuth.getCurrentUser().getUid()).child("Last Login").setValue(timestamp);
                             mRef.child(mAuth.getCurrentUser().getUid()).child("Login Method").setValue("Google");
+                            startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                            finish();
                         }
                         else {
                             Log.v("AAA", "Failure");

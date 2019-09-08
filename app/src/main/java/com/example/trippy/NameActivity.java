@@ -2,6 +2,7 @@ package com.example.trippy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -58,6 +59,8 @@ public class NameActivity extends AppCompatActivity {
             mRef.child(firebaseUser.getUid()).child("Number or Email").setValue(number);
             mRef.child(firebaseUser.getUid()).child("Last Login").setValue(timestamp);
             mRef.child(firebaseUser.getUid()).child("Login Method").setValue("Phone");
+            startActivity(new Intent(NameActivity.this, CalendarActivity.class));
+            finish();
             Toast.makeText(this, "Added to "+ firebaseUser.getUid(), Toast.LENGTH_SHORT).show();
         }
     }
