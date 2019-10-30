@@ -49,6 +49,9 @@ public class CalendarActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference().child("Users");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MMM-yyyy, hh:mm:ss a", Locale.getDefault());
+        String lastActive = sdf1.format(new Date());
+        mRef.child(mAuth.getUid()).child("Last Active: ").setValue(lastActive);
         if(mAuth.getCurrentUser() == null){
             startActivity(new Intent(CalendarActivity.this, MainActivity.class));
             finish();

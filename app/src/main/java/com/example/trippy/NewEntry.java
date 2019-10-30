@@ -17,6 +17,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class NewEntry extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseAuth mAuth;
@@ -46,10 +50,17 @@ public class NewEntry extends AppCompatActivity {
             public void onClick(View view) {
                 String titleString = title.getText().toString();
                 String titleNote = note.getText().toString();
-                mRef.child(user.getUid()).child("Notes").child(date).child(titleString).child("Note").setValue(titleNote);
-                mRef.child(user.getUid()).child("Notes").child(date).child(titleString).child("Date & Time").setValue(datePosted);
+                SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm:ss a", Locale.getDefault());
+                String timestamp1 = sdf1.format(new Date());
+                mRef = mRef.child(user.getUid()).child("Notes").push();
+                mRef.child("title").setValue(titleString);
+                mRef.child("date").setValue(date);
+                mRef.child("time").setValue(timestamp1);
+                mRef.child("fav").setValue(0);
+                mRef.child("content").setValue(titleNote);
                 Toast.makeText(NewEntry.this, "Note Successfully Added", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(NewEntry.this, CalendarActivity.class));
+                finish();
             }
         });
     }
