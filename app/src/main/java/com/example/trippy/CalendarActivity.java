@@ -1,8 +1,10 @@
 package com.example.trippy;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,6 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.util.Log;
 import android.view.View;
@@ -38,8 +41,10 @@ public class CalendarActivity extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseUser currentuser;
     DatabaseReference mRef;
+    CoordinatorLayout wholescreen;
     FirebaseAuth mAuth;
     String username;
+    Context context;
 //    FloatingActionButton fab;
     long datee;
     @Override
@@ -47,15 +52,28 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
         mAuth = FirebaseAuth.getInstance();
+        wholescreen = (CoordinatorLayout) findViewById(R.id.wholescreen);
         database = FirebaseDatabase.getInstance();
+        context = CalendarActivity.this;
         mRef = database.getReference().child("Users");
-        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MMM-yyyy, hh:mm:ss a", Locale.getDefault());
-        String lastActive = sdf1.format(new Date());
-        mRef.child(mAuth.getUid()).child("Last Active: ").setValue(lastActive);
+        currentuser = mAuth.getCurrentUser();
+        wholescreen.setOnTouchListener(new OnSwipeTouchListener(CalendarActivity.this){
+            @Override
+            public void onSwipeLeft() {
+                Toast.makeText(getApplicationContext(), "Swiped left", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(context, AllNotes.class));
+                Animatoo.animateSlideLeft(context);
+            }
+        });
+
         if(mAuth.getCurrentUser() == null){
             startActivity(new Intent(CalendarActivity.this, MainActivity.class));
             finish();
         }
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MMM-yyyy, hh:mm:ss a", Locale.getDefault());
+        String lastActive = sdf1.format(new Date());
+        mRef.child(mAuth.getUid()).child("Last Active: ").setValue(lastActive);
+
 //        fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setImageDrawable(R.drawable/fab);
         currentuser = mAuth.getCurrentUser();
@@ -107,6 +125,8 @@ public class CalendarActivity extends AppCompatActivity {
                 intent.putExtra("currentDate", timestamp);
                 intent.putExtra("datePosted", timestamp1);
                 startActivity(intent);
+
+                Animatoo.animateSlideUp(context);
             }
         });
 

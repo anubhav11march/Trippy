@@ -1,8 +1,10 @@
 package com.example.trippy;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +26,7 @@ import java.util.Locale;
 public class NewEntry extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseAuth mAuth;
+    Context context;
     DatabaseReference mRef;
     FirebaseUser user;
     EditText title, note;
@@ -32,6 +35,7 @@ public class NewEntry extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_entry);
+        context = NewEntry.this;
         database = FirebaseDatabase.getInstance();
         Bundle bundle = getIntent().getExtras();
         date = bundle.getString("currentDate");
@@ -60,9 +64,15 @@ public class NewEntry extends AppCompatActivity {
                 mRef.child("content").setValue(titleNote);
                 Toast.makeText(NewEntry.this, "Note Successfully Added", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(NewEntry.this, CalendarActivity.class));
+                Animatoo.animateFade(context);
                 finish();
             }
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Animatoo.animateSlideRight(this);
+    }
 }
