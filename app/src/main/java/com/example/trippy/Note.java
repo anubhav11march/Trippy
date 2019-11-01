@@ -2,15 +2,25 @@ package com.example.trippy;
 
 public class Note {
 
-    String title, date, content;
+    String title, date, content, datePosted;
     int fav;
-    Note(String title, String date, String content, int fav){
+    Note(String title, String date, String content, int fav, String datePosted){
         this.content = content;
         this.date = date;
         this.title = title;
         this.fav = fav;
+        this.datePosted = datePosted;
+
     }
     Note(){}
+
+    public String getDatePosted() {
+        return datePosted;
+    }
+
+    public void setDatePosted(String datePosted) {
+        this.datePosted = datePosted;
+    }
 
     public int getFav() {
         return fav;
