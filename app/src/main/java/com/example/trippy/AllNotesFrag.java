@@ -83,6 +83,8 @@ public class AllNotesFrag extends Fragment {
                 return new NoteViewHolder(view);
             }
         };
+        FBRA.startListening();
+        recyclerView.setAdapter(FBRA);
     }
 
     public static class NoteViewHolder extends RecyclerView.ViewHolder{
@@ -93,12 +95,12 @@ public class AllNotesFrag extends Fragment {
         }
 
         public void setTitle(String titlee){
-            TextView title = (TextView) mView.findViewById(R.id.title);
+            TextView title = (TextView) mView.findViewById(R.id.dates);
             title.setText(titlee);
         }
 
         public void setDateTime(String dt){
-            TextView dateTime = (TextView) mView.findViewById(R.id.dates);
+            TextView dateTime = (TextView) mView.findViewById(R.id.title);
             dateTime.setText(dt);
         }
     }

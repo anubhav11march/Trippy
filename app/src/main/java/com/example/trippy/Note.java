@@ -2,24 +2,24 @@ package com.example.trippy;
 
 public class Note {
 
-    String title, date, content, datePosted;
+    String title, time, content, postdate;
     int fav;
-    Note(String title, String date, String content, int fav, String datePosted){
+    Note(String title, String time, String content, int fav, String postdate){
         this.content = content;
-        this.date = date;
+        this.time = time;
         this.title = title;
         this.fav = fav;
-        this.datePosted = datePosted;
+        this.postdate = postdate;
 
     }
     Note(){}
 
     public String getDatePosted() {
-        return datePosted;
+        return postdate;
     }
 
-    public void setDatePosted(String datePosted) {
-        this.datePosted = datePosted;
+    public void setDatePosted(String postdate) {
+        this.postdate = postdate;
     }
 
     public int getFav() {
@@ -35,7 +35,7 @@ public class Note {
     }
 
     public String getDate() {
-        return date;
+        return time;
     }
 
     public String getTitle() {
@@ -46,8 +46,8 @@ public class Note {
         this.content = content;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDate(String time) {
+        this.time = time;
     }
 
     public void setTitle(String title) {

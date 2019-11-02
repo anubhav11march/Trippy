@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.example.trippy.AllNotesFrag;
 import com.example.trippy.R;
 
 /**
@@ -27,9 +28,12 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        if(position==0)
+            return new AllNotesFrag();
+        return new AllNotesFrag();
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+//        return PlaceholderFragment.newInstance(position + 1);
     }
 
     @Nullable
