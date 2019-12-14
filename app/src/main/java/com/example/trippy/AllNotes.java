@@ -1,5 +1,7 @@
 package com.example.trippy;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
@@ -28,16 +30,22 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class AllNotes extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseAuth mAuth;
     TextView title;
     FirebaseUser currentuser;
+    Context context;
     DatabaseReference mRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_notes);
+        context = AllNotes.this;
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -60,7 +68,26 @@ public class AllNotes extends AppCompatActivity {
                 Log.v("AAA", "datacancel");
             }
         });
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dMyyyy", Locale.getDefault());
+                String timestamp = sdf.format(new Date());
+                SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MMM-yyyy, hh:mm:ss a", Locale.getDefault());
+                String timestamp1 = sdf1.format(new Date());
+                Intent intent = new Intent(AllNotes.this, NewEntry.class);
+                intent.putExtra("currentDate", timestamp);
+                intent.putExtra("datePosted", timestamp1);
+                startActivity(intent);
+
+                Animatoo.animateSlideUp(context);
+            }
+        });
     }
+
+
 
     @Override
     public void onBackPressed() {

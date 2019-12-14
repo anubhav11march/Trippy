@@ -14,11 +14,11 @@ public class Note {
     }
     Note(){}
 
-    public String getDatePosted() {
+    public String getPostdate() {
         return postdate;
     }
 
-    public void setDatePosted(String postdate) {
+    public void setPostdate(String postdate) {
         this.postdate = postdate;
     }
 
@@ -34,7 +34,7 @@ public class Note {
         return content;
     }
 
-    public String getDate() {
+    public String getTime() {
         return time;
     }
 
@@ -46,7 +46,7 @@ public class Note {
         this.content = content;
     }
 
-    public void setDate(String time) {
+    public void setTime(String time) {
         this.time = time;
     }
 

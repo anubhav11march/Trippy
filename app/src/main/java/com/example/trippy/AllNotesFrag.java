@@ -1,6 +1,7 @@
 package com.example.trippy;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,9 +73,18 @@ public class AllNotesFrag extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull NoteViewHolder holder, int position, @NonNull Note model) {
                 final String noteNo = getRef(position).getKey();
+                Log.v("AAA", noteNo);
                 holder.setTitle(model.getTitle());
-                String date =  model.getDate() + ", " +model.getDatePosted();
+                String date =  model.getPostdate() + ", " + model.getTime();
                 holder.setDateTime(date);
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getContext(), NewEntry.class);
+                        intent.putExtra("key", noteNo);
+                        startActivity(intent);
+                    }
+                });
             }
 
             @NonNull
@@ -92,6 +103,7 @@ public class AllNotesFrag extends Fragment {
         public NoteViewHolder( View itemView){
             super(itemView);
             mView = itemView;
+
         }
 
         public void setTitle(String titlee){
@@ -103,6 +115,8 @@ public class AllNotesFrag extends Fragment {
             TextView dateTime = (TextView) mView.findViewById(R.id.title);
             dateTime.setText(dt);
         }
+
+
     }
 
 }
